@@ -6,8 +6,20 @@ interface ReviewResult {
   suggestions: string[]
 }
 
+export const AVAILABLE_MODELS = [
+  'mistral-7b-instruct',
+  'openrouter/auto',
+  'neural-chat-7b',
+]
+
 const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL
 const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY
+
+const REVIEW_PROMPTS: Record<string, string> = {
+  quick: 'Provide a brief code review. Focus on major issues only.',
+  detailed: 'Provide a comprehensive code review including bugs, style, performance, and best practices.',
+  security: 'Perform a security-focused code review. Identify potential vulnerabilities, security risks, and unsafe patterns.',
+}
 
 /**
  * Submit code for AI review
@@ -15,16 +27,18 @@ const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY
  */
 export async function submitCodeForReview(
   code: string,
-  language: string
+  language: string,
+  model: string = 'mistral-7b-instruct',
+  mode: string = 'detailed'
 ): Promise<ReviewResult> {
   // Try n8n webhook if available (production)
   if (N8N_WEBHOOK_URL) {
-    return submitViaN8nWebhook(code, language)
+    return submitViaN8nWebhook(code, language, model, mode)
   }
 
   // Fall back to direct OpenRouter (local development)
   if (OPENROUTER_API_KEY) {
-    return submitViaOpenRouter(code, language)
+    return submitViaOpenRouter(code, language, model, mode)
   }
 
   throw new Error(
@@ -37,7 +51,9 @@ export async function submitCodeForReview(
  */
 async function submitViaN8nWebhook(
   code: string,
-  language: string
+  language: string,
+  model: string,
+  mode: string
 ): Promise<ReviewResult> {
   try {
     const response = await fetch(N8N_WEBHOOK_URL!, {
@@ -48,6 +64,8 @@ async function submitViaN8nWebhook(
       body: JSON.stringify({
         code,
         language,
+        model,
+        mode,
         timestamp: new Date().toISOString(),
       }),
     })
@@ -71,9 +89,13 @@ async function submitViaN8nWebhook(
  */
 async function submitViaOpenRouter(
   code: string,
-  language: string
+  language: string,
+  model: string,
+  mode: string
 ): Promise<ReviewResult> {
   try {
+    const modePrompt = REVIEW_PROMPTS[mode] || REVIEW_PROMPTS['detailed']
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -82,17 +104,18 @@ async function submitViaOpenRouter(
         'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
       },
       body: JSON.stringify({
-        model: 'mistral-7b-instruct',
+        model: model || 'mistral-7b-instruct',
         messages: [
           {
             role: 'system',
-            content: `You are an expert code reviewer. Analyze the provided code and give a detailed review including:
-- Potential bugs and issues
-- Style and best practice problems
-- Performance concerns
-- Security vulnerabilities if any
+            content: `You are an expert code reviewer. ${modePrompt}
 
-Format your response with clear sections using "ISSUES:" and "SUGGESTIONS:" headers for bullet points.`,
+Format your response with clear sections:
+- A summary paragraph
+- ISSUES: (bullet-pointed list of problems)
+- SUGGESTIONS: (bullet-pointed list of improvements)
+
+Be concise but thorough.`,
           },
           {
             role: 'user',
