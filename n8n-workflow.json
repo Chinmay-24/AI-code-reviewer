@@ -1,0 +1,85 @@
+{
+  "name": "AI Code Review Webhook",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "code-review",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook_node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{$env.OPENROUTER_API_KEY}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "model": "mistral-7b-instruct",
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an expert code reviewer. Analyze the provided code and give a detailed review including: potential issues, bugs, style problems, performance concerns, and suggestions for improvement. Format your response with clear sections for ISSUES and SUGGESTIONS using bullet points."
+            },
+            {
+              "role": "user",
+              "content": "Review this {{$node.Webhook.json.language}} code:\n\n```{{$node.Webhook.json.language}}\n{{$node.Webhook.json.code}}\n```"
+            }
+          ],
+          "max_tokens": 1500,
+          "temperature": 0.7
+        },
+        "options": {}
+      },
+      "id": "http_request",
+      "name": "Call OpenRouter API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [350, 300]
+    },
+    {
+      "parameters": {
+        "dataType": "object",
+        "value": "{\n  \"content\": {{$node[\"Call OpenRouter API\"].json.choices[0].message.content}},\n  \"model\": {{$node[\"Call OpenRouter API\"].json.model}},\n  \"usage\": {{$node[\"Call OpenRouter API\"].json.usage}}\n}"
+      },
+      "id": "response_node",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [600, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Call OpenRouter API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpenRouter API": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": null
+}
