@@ -57,7 +57,7 @@ export default function FavoritesPanel({ isOpen, onClose, onLoadFavorite }: Favo
                       {fav.name}
                     </p>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                      {fav.language} • {fav.mode} • {fav.model.split('/')[1] || fav.model}
+                      {fav.language} • {fav.mode} • {fav.model?.split('/')[1] || fav.model || 'Auto'}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-500 mt-1 font-mono truncate">
                       {fav.code.slice(0, 60)}...

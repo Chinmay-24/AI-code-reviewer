@@ -133,7 +133,21 @@ Be concise but thorough.`,
     }
 
     const data = await response.json()
-    return parseReviewResponse(data.choices[0].message)
+    
+    if (data.error) {
+      throw new Error(`OpenRouter error: ${data.error.message || 'Unknown error'}`)
+    }
+    
+    if (!data.choices || data.choices.length === 0) {
+      throw new Error(`OpenRouter returned an empty response. Provider may be overloaded.`)
+    }
+    
+    const message = data.choices[0].message || data.choices[0].delta || {}
+    if (data.choices[0].error) {
+        throw new Error(`Provider error: ${data.choices[0].error}`)
+    }
+
+    return parseReviewResponse(message)
   } catch (error) {
     if (error instanceof Error) {
       throw error
@@ -196,6 +210,7 @@ function extractSection(content: string, pattern: string): string[] {
  * Extract bullet points from text
  */
 function extractBulletPoints(text: string): string[] {
+  if (!text) return []
   const lines = text.split('\n')
   const points: string[] = []
 

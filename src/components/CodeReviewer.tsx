@@ -352,7 +352,7 @@ export default function CodeReviewer() {
               >
                 {AVAILABLE_MODELS.map((m) => (
                   <option key={m} value={m}>
-                    {m.split('/').pop()?.replace(':free', '') || m}
+                    {m?.split('/').pop()?.replace(':free', '') || m}
                   </option>
                 ))}
               </select>
@@ -546,7 +546,7 @@ export default function CodeReviewer() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-mono text-xs text-blue-600 font-medium">
-                      {item.language} • {item.mode} • {item.model.split('-')[0]}
+                      {item.language} • {item.mode} • {item.model?.split('-')[0] || 'Auto'}
                     </p>
                     <p className="text-slate-600 truncate text-sm mt-1 group-hover:text-slate-700">
                       {item.code.slice(0, 50)}...
