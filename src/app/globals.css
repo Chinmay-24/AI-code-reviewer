@@ -16,29 +16,36 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background-attachment: fixed;
+  color: #1e293b;
+  letter-spacing: -0.5px;
 }
 
 code {
   font-family: 'Courier New', 'monospace';
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
-  border-radius: 3px;
+  background-color: rgba(59, 130, 246, 0.12);
+  padding: 3px 7px;
+  border-radius: 4px;
   font-size: 0.9em;
+  color: #2563eb;
+  font-weight: 500;
 }
 
 pre {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
-  border-radius: 8px;
+  background-color: #f1f5f9;
+  padding: 1.25rem;
+  border-radius: 10px;
   overflow-x: auto;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #cbd5e1;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 /* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -49,11 +56,22 @@ pre {
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-16px);
   }
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -66,16 +84,47 @@ pre {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
 
 .animate-slideIn {
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.4s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
+}
+
+/* Button and input transitions */
+button, input, select, textarea {
+  transition: all 0.2s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Better focus states */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 0 0 2px #2563eb;
 }
 
 /* Scrollbar styling */
@@ -85,28 +134,20 @@ pre {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.5);
+  background: #cbd5e1;
   border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.8);
-}
-
-/* VSCode-like theme colors */
-:root {
-  --vscode-bg: #1e1e1e;
-  --vscode-sidebar: #252526;
-  --vscode-editor: #1e1e1e;
-  --vscode-text: #d4d4d4;
-  --vscode-accent: #007acc;
-  --vscode-error: #f48771;
-  --vscode-warning: #ce9178;
+  background: #94a3b8;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 /* Selection styling */
