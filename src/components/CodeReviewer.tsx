@@ -352,7 +352,7 @@ export default function CodeReviewer() {
               >
                 {AVAILABLE_MODELS.map((m) => (
                   <option key={m} value={m}>
-                    {m === 'openrouter/auto' ? 'Auto (Best Available)' : m.replace('mistralai/', '').replace('meta-llama/', '')}
+                    {m.split('/').pop()?.replace(':free', '') || m}
                   </option>
                 ))}
               </select>
