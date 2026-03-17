@@ -7,8 +7,7 @@ interface ReviewResult {
 }
 
 export const AVAILABLE_MODELS = [
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'google/gemma-3-27b-it:free',
+  'google/gemini-2.0-flash-lite-preview-02-05:free',
   'nvidia/nemotron-3-nano-30b-a3b:free',
 ]
 
@@ -28,7 +27,7 @@ const REVIEW_PROMPTS: Record<string, string> = {
 export async function submitCodeForReview(
   code: string,
   language: string,
-  model: string = 'google/gemma-3-27b-it:free',
+  model: string = 'google/gemini-2.0-flash-lite-preview-02-05:free',
   mode: string = 'detailed'
 ): Promise<ReviewResult> {
   // Try n8n webhook if available (production)
@@ -104,7 +103,7 @@ async function submitViaOpenRouter(
         'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
       },
       body: JSON.stringify({
-        model: model || 'google/gemma-3-27b-it:free',
+        model: model || 'google/gemini-2.0-flash-lite-preview-02-05:free',
         messages: [
           {
             role: 'system',
