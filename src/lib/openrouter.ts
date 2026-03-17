@@ -7,9 +7,9 @@ interface ReviewResult {
 }
 
 export const AVAILABLE_MODELS = [
-  'meta-llama/llama-3.2-3b-instruct:free',
-  'mistralai/mistral-7b-instruct-v0.1:free',
-  'google/gemma-2-9b-it:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'google/gemma-3-27b-it:free',
+  'nvidia/nemotron-3-nano-30b-a3b:free',
 ]
 
 const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL
@@ -28,7 +28,7 @@ const REVIEW_PROMPTS: Record<string, string> = {
 export async function submitCodeForReview(
   code: string,
   language: string,
-  model: string = 'mistralai/mistral-7b-instruct-v0.1:free',
+  model: string = 'google/gemma-3-27b-it:free',
   mode: string = 'detailed'
 ): Promise<ReviewResult> {
   // Try n8n webhook if available (production)
@@ -104,7 +104,7 @@ async function submitViaOpenRouter(
         'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
       },
       body: JSON.stringify({
-        model: model || 'mistralai/mistral-7b-instruct-v0.1:free',
+        model: model || 'google/gemma-3-27b-it:free',
         messages: [
           {
             role: 'system',
