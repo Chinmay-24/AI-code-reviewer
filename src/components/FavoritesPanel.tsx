@@ -92,4 +92,3 @@ export default function FavoritesPanel({ isOpen, onClose, onLoadFavorite }: Favo
   )
 }
 
-import React from 'react'
