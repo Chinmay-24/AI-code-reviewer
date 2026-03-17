@@ -23,7 +23,7 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "model": "mistral-7b-instruct",
+          "model": "openrouter/auto",
           "messages": [
             {
               "role": "system",

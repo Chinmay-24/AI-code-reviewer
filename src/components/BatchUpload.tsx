@@ -117,7 +117,7 @@ export default function BatchUpload({ model, mode, onComplete }: BatchUploadProp
 
   return (
     <div className="space-y-4">
-      <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 hover:border-blue-400 hover:bg-blue-50/50 transition cursor-pointer bg-gradient-to-br from-white to-slate-50/50 shadow-sm">
+      <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 hover:border-blue-400 hover:bg-blue-50/50 transition cursor-pointer bg-linear-to-br from-white to-slate-50/50 shadow-sm">
         <input
           type="file"
           multiple

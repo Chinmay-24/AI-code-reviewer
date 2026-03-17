@@ -7,9 +7,9 @@ interface ReviewResult {
 }
 
 export const AVAILABLE_MODELS = [
-  'mistral-7b-instruct',
   'openrouter/auto',
-  'neural-chat-7b',
+  'mistralai/mistral-7b-instruct',
+  'meta-llama/llama-2-7b-chat',
 ]
 
 const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL
@@ -28,7 +28,7 @@ const REVIEW_PROMPTS: Record<string, string> = {
 export async function submitCodeForReview(
   code: string,
   language: string,
-  model: string = 'mistral-7b-instruct',
+  model: string = 'openrouter/auto',
   mode: string = 'detailed'
 ): Promise<ReviewResult> {
   // Try n8n webhook if available (production)

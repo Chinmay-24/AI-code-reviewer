@@ -259,7 +259,7 @@ export default function CodeReviewer() {
 
       {/* Templates Section */}
       {showTemplates && (
-        <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-50/50 border border-blue-200 rounded-xl shadow-sm animate-slideDown">
+        <div className="p-5 bg-linear-to-br from-blue-50 to-blue-50/50 border border-blue-200 rounded-xl shadow-sm animate-slideDown">
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Code Templates</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {Object.keys(CODE_TEMPLATES).map((lang) => (
@@ -281,7 +281,7 @@ export default function CodeReviewer() {
 
       {/* Batch Upload Section */}
       {showBatch && (
-        <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-50/50 border border-amber-200 rounded-xl shadow-sm animate-slideDown">
+        <div className="p-5 bg-linear-to-br from-amber-50 to-amber-50/50 border border-amber-200 rounded-xl shadow-sm animate-slideDown">
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Batch Code Review</h3>
           <BatchUpload
             model={model}
@@ -352,7 +352,7 @@ export default function CodeReviewer() {
               >
                 {AVAILABLE_MODELS.map((m) => (
                   <option key={m} value={m}>
-                    {m === 'mistral-7b-instruct' ? 'Mistral 7B (Fast)' : m}
+                    {m === 'openrouter/auto' ? 'Auto (Best Available)' : m.replace('mistralai/', '').replace('meta-llama/', '')}
                   </option>
                 ))}
               </select>
@@ -516,13 +516,13 @@ export default function CodeReviewer() {
           )}
 
           {!result && !error && !loading && (
-            <div className="p-6 bg-gradient-to-br from-slate-50 to-slate-50/50 border border-dashed border-slate-300 rounded-xl text-center shadow-sm">
+            <div className="p-6 bg-linear-to-br from-slate-50 to-slate-50/50 border border-dashed border-slate-300 rounded-xl text-center shadow-sm">
               <p className="text-slate-500 text-sm font-medium">Results will appear here</p>
             </div>
           )}
 
           {loading && (
-            <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-50/50 border border-blue-200 rounded-xl text-center shadow-sm animate-slideDown">
+            <div className="p-6 bg-linear-to-br from-blue-50 to-blue-50/50 border border-blue-200 rounded-xl text-center shadow-sm animate-slideDown">
               <div className="flex justify-center mb-3">
                 <div className="animate-spin h-6 w-6 border-3 border-blue-600 border-t-transparent rounded-full"></div>
               </div>
