@@ -8,7 +8,7 @@ interface ReviewResult {
 
 export const AVAILABLE_MODELS = [
   'meta-llama/llama-3.2-3b-instruct:free',
-  'mistralai/mistral-7b-instruct:free',
+  'mistralai/mistral-7b-instruct-v0.1:free',
   'google/gemma-2-9b-it:free',
 ]
 
@@ -28,7 +28,7 @@ const REVIEW_PROMPTS: Record<string, string> = {
 export async function submitCodeForReview(
   code: string,
   language: string,
-  model: string = 'mistralai/mistral-7b-instruct:free',
+  model: string = 'mistralai/mistral-7b-instruct-v0.1:free',
   mode: string = 'detailed'
 ): Promise<ReviewResult> {
   // Try n8n webhook if available (production)
@@ -104,7 +104,7 @@ async function submitViaOpenRouter(
         'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
       },
       body: JSON.stringify({
-        model: model || 'mistralai/mistral-7b-instruct:free',
+        model: model || 'mistralai/mistral-7b-instruct-v0.1:free',
         messages: [
           {
             role: 'system',
